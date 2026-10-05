@@ -1,0 +1,170 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: Lyra Embedded for WooCommerce\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2026-07-29 08:46+0200\n"
+"PO-Revision-Date: 2026-09-02 16:07+0200\n"
+"Last-Translator: \n"
+"Language-Team: Lyra Network\n"
+"Language: pt_BR\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+"X-Domain: woo-lyra-embedded-payment\n"
+"X-Generator: Poedit 3.9\n"
+"X-Poedit-SourceCharset: UTF-8\n"
+"X-Poedit-KeywordsList: __\n"
+"X-Poedit-Basepath: ..\n"
+"X-Poedit-SearchPath-0: .\n"
+
+#: class-wc-gateway-lyra-embedded.php:30
+#, php-format
+msgid "%s embedded payment"
+msgstr "Pagamento integrado %s"
+
+#: class-wc-gateway-lyra-embedded.php:60
+msgid ""
+"Configure the payment form in real time with our intuitive tool. Adjust colors, fonts and fields via a visual interface, "
+"and immediately preview the result on all devices. Simple and efficient, it speeds up validation and deployment while "
+"guaranteeing an optimal user experience."
+msgstr ""
+"Configure o formulário de pagamento em tempo real com a nossa ferramenta intuitiva. Ajuste cores, fontes e campos através "
+"de uma interface visual e visualize imediatamente o resultado em todos os dispositivos. Simples e eficiente, acelera a "
+"validação e a implementação, garantindo ao mesmo tempo uma experiência de utilizador ótima."
+
+#: class-wc-gateway-lyra-embedded.php:64
+msgid "Payment form and payment methods"
+msgstr "Formulário de pagamento e métodos de pagamento"
+
+#: class-wc-gateway-lyra-embedded.php:69
+msgid "REST API Notification URL"
+msgstr "URL de notificação do API REST"
+
+#: class-wc-gateway-lyra-embedded.php:72
+#, php-format
+msgid ""
+"URL to copy into your %s Back Office > Settings > Notification rules. In multistore mode, notification URL is the same for "
+"all the stores."
+msgstr ""
+"URL para copiar no Back Office %s > Definições > Regras de notificação. No modo multiloja, o URL de notificação é o mesmo "
+"para todas as lojas."
+
+#: class-wc-gateway-lyra-embedded.php:76
+msgid "Plugin Credits"
+msgstr "Créditos do plugin"
+
+#: class-wc-gateway-lyra-embedded.php:275
+msgid "Developed by"
+msgstr "Desenvolvido por"
+
+#: class-wc-gateway-lyra-embedded.php:278
+msgid "Contact"
+msgstr "Contacto"
+
+#: class-wc-gateway-lyra-embedded.php:278
+msgid "client support"
+msgstr "apoio ao cliente"
+
+#: class-wc-gateway-lyra-embedded.php:281
+msgid "Module version"
+msgstr "Versão do módulo"
+
+#: class-wc-gateway-lyra-embedded.php:286
+msgid "Access to the module configuration documentation:"
+msgstr "Aceder à documentação de configuração do módulo:"
+
+#: class-wc-gateway-lyra-embedded.php:331
+msgid "Configure the payment form"
+msgstr "Configurar o formulário de pagamento"
+
+#: woo-lyra-embedded-payment.php:51
+#, php-format
+msgid "Sorry ! In order to use WooCommerce %s Payment plugin, you need to install and activate the WooCommerce plugin."
+msgstr "Lamentamos! Para usar o plugin de pagamento WooCommerce %s, é necessário instalar e ativar o plugin WooCommerce."
+
+#: class-wc-gateway-lyra-embedded.php:881
+#, php-format
+msgid "%s embedded token"
+msgstr "token integrado %s"
+
+#: class-wc-gateway-lyra-embedded.php:1021
+msgid "3DS authentication: "
+msgstr "Autenticação 3DS: "
+
+#: class-wc-gateway-lyra-embedded.php:1027
+msgid "3DS certificate: "
+msgstr "Certificado 3DS: "
+
+#: class-wc-gateway-lyra-embedded.php:1032
+msgid "Authentication type: "
+msgstr "Tipo de autenticação: "
+
+#: class-wc-gateway-lyra-embedded.php:1072
+#, php-format
+msgid "Transaction ID: %s."
+msgstr "ID da transação: %s."
+
+#: class-wc-gateway-lyra-embedded.php:1076
+#, php-format
+msgid "Transaction UUID: %s."
+msgstr "UUID da transação: %s."
+
+#: class-wc-gateway-lyra-embedded.php:1081
+#, php-format
+msgid "Transaction status: %s."
+msgstr "Estado da transação: %s."
+
+#: includes/LyraEmbeddedTools.php:348
+msgid "Payment by credit card"
+msgstr "Pagamento com cartão de crédito"
+
+#: includes/LyraEmbeddedTools.php:491
+#, php-format
+msgid "The store currency (%s) is not supported by %s."
+msgstr "A moeda da loja (%s) não é suportada por %s."
+
+#: includes/LyraEmbeddedRefundProcessor.php
+#, php-format
+msgid "Refund of split payment is not supported. Please, consider making necessary changes in %1$s Back Office."
+msgstr "O reembolso de pagamento parcelado não é suportado. Por favor, faça as alterações necessárias no Back Office do %1$s."
+
+#: class-wc-gateway-lyra-embedded.php:1390
+#, php-format
+msgid "Update of transaction amount in %s Back Office."
+msgstr "Atualização do valor da transação no Back Office de %s."
+
+#: class-wc-gateway-lyra-embedded.php:903
+#, php-format
+msgid "Online Refund of %1$s."
+msgstr "Reembolso online de %1$s."
+
+#: class-wc-gateway-lyra-embedded.php:911
+#, php-format
+msgid "Online Refund of %1$s - Reason: %2$s."
+msgstr "Reembolso online de %1$s - Motivo: %2$s."
+
+#: includes/LyraEmbeddedSubscriptionProcessor.php:43
+msgid "Private key is not configured. Subscription renewal cannot be processed."
+msgstr "A chave privada não está configurada. A renovação da assinatura não pode ser processada."
+
+#: includes/LyraEmbeddedSubscriptionProcessor.php:58
+msgid "Customer has no valid identifier. Subscription renewal cannot be processed."
+msgstr "O cliente não tem um identificador válido. A renovação da assinatura não pode ser processada."
+
+#: includes/LyraEmbeddedSubscriptionProcessor.php:74
+#, php-format
+msgid "An error has occurred during the renewal of the subscription. Please consult the %s logs for more details."
+msgstr "Ocorreu um erro durante a renovação da assinatura. Consulte os registos de %s para obter mais detalhes."
+
+#. used in order note
+#: includes/LyraEmbeddedSubscriptionProcessor.php:107
+#, php-format
+msgctxt "used in order note"
+msgid "Processed renewal payment for order #%s."
+msgstr "Pagamento de renovação processado para o pedido #%s."
+
+#: includes/LyraEmbeddedSubscriptionProcessor.php:128
+#, php-format
+msgid "Error while processing order: %s"
+msgstr "Erro ao processar o pedido: %s"

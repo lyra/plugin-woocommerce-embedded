@@ -1,0 +1,36 @@
+/**
+ * Copyright © Lyra Network.
+ * This file is part of Lyra Embedded plugin for WooCommerce. See COPYING.md for license details.
+ *
+ * @author    Lyra Network (https://www.lyra.com/)
+ * @copyright Lyra Network
+ * @license   https://opensource.org/licenses/osl-3.0.php Open Software License (OSL 3.0)
+ */
+
+@CHARSET "UTF-8";
+
+.kr-form-error span a {
+    all: inherit !important;
+    text-decoration: underline !important;
+    cursor: pointer !important;
+}
+
+.blockUI.blockOverlay {
+    z-index: -1 !important;
+}
+
+.wc-block-components-notice-banner.is-info {
+    display: none !important;
+}
+
+div.kr-smart-form-list-section-name {
+    font-weight: bold !important;
+}
+
+button.kr-smart-form-single-payment-button {
+    display: none !important;
+}
+
+#lyra_embedded_rest_wrapper {
+    margin-bottom: 5%;
+}

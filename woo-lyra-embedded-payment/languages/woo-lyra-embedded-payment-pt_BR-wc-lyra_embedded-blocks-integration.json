@@ -1,0 +1,23 @@
+{
+  "translation-revision-date": "2026-08-13 00:00+0200",
+  "generator": "Lyra Network",
+  "domain": "messages",
+  "locale_data": {
+    "messages": {
+      "": {
+        "domain": "messages",
+        "plural-forms": "nplurals=2; plural=(n > 1);",
+        "lang": "pt_BR"
+      },
+      "Payment by credit card": ["Pagamento com cartão de crédito"],
+      "Unable to initialise the payment form.": ["Não foi possível inicializar o formulário de pagamento."],
+      "Unable to load the payment form. Please refresh the page and try again.": ["Não foi possível carregar o formulário de pagamento. Por favor, atualize a página e tente novamente."],
+      "The payment form is not ready yet. Please wait a few seconds and try again.": ["O formulário de pagamento ainda não está pronto. Por favor, aguarde alguns segundos e tente novamente."],
+      "Please check your card details and try again.": ["Por favor, verifique os detalhes do seu cartão e tente novamente."]
+    }
+  },
+  "comment": {
+    "reference": "client/blocks/lyra_embedded.js"
+  }
+}
+
