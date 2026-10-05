@@ -1,0 +1,23 @@
+{
+  "translation-revision-date": "2026-08-13 00:00+0200",
+  "generator": "Lyra Network",
+  "domain": "messages",
+  "locale_data": {
+    "messages": {
+      "": {
+        "domain": "messages",
+        "plural-forms": "nplurals=2; plural=(n != 1);",
+        "lang": "de_DE"
+      },
+      "Payment by credit card": ["Zahlung mit Kreditkarte"],
+      "Unable to initialise the payment form.": ["Zahlungsformular konnte nicht initialisiert werden."],
+      "Unable to load the payment form. Please refresh the page and try again.": ["Zahlungsformular konnte nicht geladen werden. Bitte aktualisieren Sie die Seite und versuchen Sie es erneut."],
+      "The payment form is not ready yet. Please wait a few seconds and try again.": ["Das Zahlungsformular ist noch nicht bereit. Bitte warten Sie einige Sekunden und versuchen Sie es erneut."],
+      "Please check your card details and try again.": ["Bitte überprüfen Sie Ihre Kartendaten und versuchen Sie es erneut."]
+    }
+  },
+  "comment": {
+    "reference": "client/blocks/lyra_embedded.js"
+  }
+}
+
