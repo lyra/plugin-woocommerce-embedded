@@ -1,4 +1,4 @@
-﻿<?php
+<?php
 /**
  * Copyright © Lyra Network.
  * This file is part of Lyra Embedded plugin for WooCommerce. See COPYING.md for license details.
@@ -41,7 +41,7 @@ class LyraEmbeddedTools
     /**
      * @var string The current plugin version.
      */
-    private static $PLUGIN_VERSION = '1.0.0';
+    private static $PLUGIN_VERSION = '1.0.1';
 
     /**
      * @var string The REST API base URL.
