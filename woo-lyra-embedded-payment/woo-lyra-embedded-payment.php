@@ -14,7 +14,7 @@ declare(strict_types=1);
  * Plugin Name: Lyra Embedded for WooCommerce
  * Plugin URI: https://www.lyra.com/
  * Description: Embedded payment gateway integration for WooCommerce using Lyra.
- * Version: 1.0.0-beta1
+ * Version: 1.0.1
  * Author: Lyra Network
  * Author URI: https://www.lyra.com/
  * License: OSL-3.0
@@ -22,7 +22,7 @@ declare(strict_types=1);
  * Text Domain: woo-lyra-embedded-payment
  * Domain Path: /languages
  * WC requires at least: 8.0
- * WC tested up to: 11.1
+ * WC tested up to: 11.2
  * Requires at least: 6.0
  * Requires PHP: 8.0
  */
