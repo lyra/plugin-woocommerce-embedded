@@ -41,7 +41,7 @@ class LyraEmbeddedTools
     /**
      * @var string The current plugin version.
      */
-    private static $PLUGIN_VERSION = '1.0.1';
+    private static $PLUGIN_VERSION = '1.0.2';
 
     /**
      * @var string The REST API base URL.
@@ -216,9 +216,12 @@ class LyraEmbeddedTools
 
         $ws_data = $model['wsData'] ?? [];
 
+        $currency = get_woocommerce_currency() ?? $ws_data['currency'] ?? '';
+        $currency = LyraApi::findCurrencyByAlphaCode($currency, self::get_white_label());
+
         $params = [
             "amount" => $ws_data['amount'] ?? '',
-            "currency" => $ws_data['currency'] ?? '',
+            "currency" => $currency ? $currency->getAlpha3() : '',
             "orderId" => "myOrderId-999999",
             "formAction" => $ws_data['formAction'] ?? 'PAYMENT',
             "customer" => [
