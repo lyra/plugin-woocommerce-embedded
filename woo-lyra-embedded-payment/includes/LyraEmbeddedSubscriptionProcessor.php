@@ -157,7 +157,7 @@ class LyraEmbeddedSubscriptionProcessor
 
         $is_hpos_enabled = LyraEmbeddedTools::is_hpos_enabled();
 
-        $billing_persontype = LyraEmbeddedTools::get_meta_data($renewal_orde, '_billing_persontype', $is_hpos_enabled);
+        $billing_persontype = LyraEmbeddedTools::get_meta_data($renewal_order, '_billing_persontype', $is_hpos_enabled);
         if ($billing_persontype && $billing_persontype == '2') {
             $identity_code = '_billing_cnpj';
             $cust_status = 'COMPANY';
@@ -180,9 +180,9 @@ class LyraEmbeddedSubscriptionProcessor
                     'state' => $renewal_order->get_billing_state(),
                     'phoneNumber' => str_replace(['(', '-', ' ', ')'], '', $renewal_order->get_billing_phone()),
                     'country' => $renewal_order->get_billing_country(),
-                    'identityCode' => LyraEmbeddedTools::get_meta_data($renewal_orde, $identity_code, $is_hpos_enabled),
-                    'streetNumber' => LyraEmbeddedTools::get_meta_data($renewal_orde, '_billing_number', $is_hpos_enabled),
-                    'district' => LyraEmbeddedTools::get_meta_data($renewal_orde, '_billing_neighborhood', $is_hpos_enabled) ?? $renewal_order->get_billing_city(),
+                    'identityCode' => LyraEmbeddedTools::get_meta_data($renewal_order, $identity_code, $is_hpos_enabled),
+                    'streetNumber' => LyraEmbeddedTools::get_meta_data($renewal_order, '_billing_number', $is_hpos_enabled),
+                    'district' => LyraEmbeddedTools::get_meta_data($renewal_order, '_billing_neighborhood', $is_hpos_enabled) ?? $renewal_order->get_billing_city(),
                     'status' => $cust_status
                 ],
                 'shippingDetails' => [
@@ -216,7 +216,11 @@ class LyraEmbeddedSubscriptionProcessor
         ];
 
         try {
-            $client  = self::get_rest_client();
+            $client = self::get_rest_client();
+            if (! $client) {
+                return false;
+            }
+
             $result = $client->post('V4/Charge/CreatePayment', wp_json_encode($params));
 
             if ($result['status'] != 'SUCCESS') {
@@ -255,9 +259,7 @@ class LyraEmbeddedSubscriptionProcessor
         }
 
         $customer = new WC_Customer($cust_id);
-        if (! $customer) {
-            return false;
-        }
+        $customer_ref = '#' . $cust_id . ($customer->get_billing_email() ? ' (' . $customer->get_billing_email() . ')' : '');
 
         try {
             $request_data = [
@@ -266,19 +268,23 @@ class LyraEmbeddedSubscriptionProcessor
 
             // Perform REST request to check identifier.
             $client = self::get_rest_client();
+            if (! $client) {
+                return true;
+            }
+
             $result = $client->post('V4/Token/Get', wp_json_encode($request_data));
 
             // Verify the API call succeeded before reading the answer.
             if (! isset($result['status']) || $result['status'] !== 'SUCCESS') {
                 $error_code = $result['answer']['errorCode'] ?? 'unknown';
-                WC_Gateway_LyraEmbedded::log_info("Identifier check API call failed for customer (code: {$error_code}). Assuming identifier is still valid.");
+                WC_Gateway_LyraEmbedded::log_info("Identifier check API call failed for customer {$customer_ref} (code: {$error_code}). Assuming identifier is still valid.");
 
                 return true;
             }
 
             $cancellation_date = $result['answer']['cancellationDate'] ?? null;
             if ($cancellation_date && (strtotime($cancellation_date) <= time())) {
-                WC_Gateway_LyraEmbedded::log_error("Identifier for customer {$customer->get_billing_email()}, is expired on payment gateway in date of: {$cancellation_date}.");
+                WC_Gateway_LyraEmbedded::log_error("Identifier for customer {$customer_ref}, is expired on payment gateway in date of: {$cancellation_date}.");
 
                 return false;
             }
@@ -288,12 +294,12 @@ class LyraEmbeddedSubscriptionProcessor
             $invalid_ident_codes = ['PSP_030', 'PSP_031', 'PSP_561', 'PSP_607', 'INT_905'];
             if (in_array($e->getCode(), $invalid_ident_codes, true)) {
                 // The identifier is invalid or doesn't exist.
-                WC_Gateway_LyraEmbedded::log_error("Identifier for customer {$customer->get_billing_email()}, is invalid or doesn't exist: {$e->getMessage()}");
+                WC_Gateway_LyraEmbedded::log_error("Identifier for customer {$customer_ref}, is invalid or doesn't exist: {$e->getMessage()}");
 
                 return false;
             }
 
-            WC_Gateway_LyraEmbedded::log_error("Identifier for customer {$customer->get_billing_email()}, couldn't be verified on gateway: {$e->getMessage()}.");
+            WC_Gateway_LyraEmbedded::log_error("Identifier for customer {$customer_ref}, couldn't be verified on gateway: {$e->getMessage()}.");
 
             return true;
         }
@@ -345,7 +351,7 @@ class LyraEmbeddedSubscriptionProcessor
         $private_key = LyraEmbeddedTools::get_private_key();
 
         if (empty($shop_id) || empty($private_key)) {
-            WC_Gateway_LyraEmbedded::log_error("Unable to instantiate RET API client for {$metadata}: missing shop ID or private key in active Lyra Embedded configuration.");
+            WC_Gateway_LyraEmbedded::log_error("Unable to instantiate REST API client: missing shop ID or private key in active Lyra Embedded configuration.");
 
             return null;
         }
