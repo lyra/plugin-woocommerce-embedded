@@ -29,8 +29,6 @@
         return {};
     };
 
-    var data = getPaymentFieldsData();
-    var formConfig = data.formConfig || null;
     var formIsValidated = false;
 
     $(document).ready(function() {
@@ -44,7 +42,7 @@
             lyraEmbeddedSubmitPayment();
         });
 
-        $('#place_order').on('click', function(event) {
+        $(document).on('click', '#place_order', function(event) {
             if (! $('#payment_method_lyra_embedded').is(':checked')) {
                 return true;
             }
@@ -77,54 +75,86 @@
             });
         });
 
-        $('form.checkout').on('checkout_place_order_lyra_embedded', function() {
+        var checkoutForm = null;
+        $('form.checkout').on('checkout_place_order_lyra_embedded', function(event, form) {
+            checkoutForm = form;
             $('form.checkout').removeClass('processing').unblock();
-            $.ajaxPrefilter(function(options, originalOptions, jqXHR) {
-                if ((originalOptions.url.indexOf('wc-ajax=checkout') == -1)
-                    && (originalOptions.url.indexOf('action=woocommerce-checkout') == -1)
-                    && (originalOptions.url.indexOf('wc-ajax=complete_order') == -1)) {
+        });
+
+        $.ajaxPrefilter(function(options, originalOptions, jqXHR) {
+            var requestUrl = originalOptions && originalOptions.url;
+            if (typeof requestUrl !== 'string') {
+                requestUrl = options.url;
+            }
+
+            if (typeof requestUrl !== 'string'
+                || ((requestUrl.indexOf('wc-ajax=checkout') == -1)
+                    && (requestUrl.indexOf('action=woocommerce-checkout') == -1)
+                    && (requestUrl.indexOf('wc-ajax=complete_order') == -1))) {
+                return;
+            }
+
+            if (typeof options.data !== 'string'
+                || options.data.indexOf('payment_method=lyra_embedded') == -1) {
+                return;
+            }
+
+            var originalSuccess = options.success;
+
+            options.success = async function(response, status, xhr) {
+                var result = (response && response.result) ? response.result : false;
+
+                if (result !== 'success') {
+                    if (typeof originalSuccess === 'function') {
+                        originalSuccess.call(this, response, status, xhr);
+                    }
+
                     return;
                 }
 
-                if (options.data.indexOf('payment_method=lyra_embedded') == -1) {
-                    return;
+                if (checkoutForm) {
+                    checkoutForm.detachUnloadEventsOnSubmit();
                 }
 
-                $('.kr-form-error').html('');
-                var originalSuccess = options.success;
+                // Unblock screen.
+                $('form.checkout').unblock();
 
-                options.success = async function(response, status, xhr) {
-                    var result = (response && response.result) ? response.result : false;
+                var responseFormConfig = response.formConfig;
+                if (typeof responseFormConfig === 'string') {
+                    responseFormConfig = JSON.parse(responseFormConfig);
+                }
 
-                    if (result !== 'success') {
-                        if (typeof originalSuccess === 'function') {
-                            originalSuccess.call(this, response, status, xhr);
-                        }
-                        return;
-                    }
-
-                    // Unblock screen.
-                    $('form.checkout').unblock();
-
-                    var responseFormConfig = response.formConfig;
-                    if (typeof responseFormConfig === 'string') {
-                        responseFormConfig = JSON.parse(responseFormConfig);
-                    }
-
-                    await KR.setFormConfig(responseFormConfig);
-                    lyraEmbeddedSubmitPayment();
-                };
-            });
+                await KR.setFormConfig(responseFormConfig);
+                lyraEmbeddedSubmitPayment();
+            };
         });
 
         // Wait for KR to be ready before initialising the payment form.
         var krInitAttempts = 0;
         var krMaxAttempts = 50; // 50 × 100 ms = 5 s max.
+        var krInitTimer = null;
+        var krEventsRegistered = false;
+        var krInitializing = false;
+        var krRefreshPending = false;
+        var krInitializedWrapper = null;
 
         function initWhenKrReady() {
+            clearTimeout(krInitTimer);
+            krInitTimer = null;
+
+            if (krInitializing) {
+                krRefreshPending = true;
+                return;
+            }
+
+            var wrapper = document.querySelector('#lyra_embedded_rest_wrapper');
+            if (! wrapper || wrapper === krInitializedWrapper) {
+                return;
+            }
+
             if (typeof KR === 'undefined') {
                 if (++krInitAttempts < krMaxAttempts) {
-                    setTimeout(initWhenKrReady, 100);
+                    krInitTimer = setTimeout(initWhenKrReady, 100);
                 } else {
                     console.error('[Lyra Embedded] KR not available after 5 s.');
                 }
@@ -132,19 +162,40 @@
                 return;
             }
 
-            lyraEmbeddedInitRestEvents();
+            if (! krEventsRegistered) {
+                lyraEmbeddedInitRestEvents();
+                krEventsRegistered = true;
+            }
 
-            if (!formConfig) {
+            var formConfig = getPaymentFieldsData().formConfig;
+            if (! formConfig) {
                 console.error('[Lyra Embedded] Missing form configuration for payment fields initialisation.');
                 return;
             }
 
-            KR.setFormConfig(formConfig).then(function(v) {
+            krInitializing = true;
+            Promise.resolve().then(function() {
+                return KR.setFormConfig(formConfig);
+            }).then(function(v) {
                 KR = v.KR;
+                krInitializedWrapper = wrapper;
+            }).catch(function(error) {
+                console.error('[Lyra Embedded] Unable to initialise payment fields.', error);
+            }).finally(function() {
+                krInitializing = false;
+                if (krRefreshPending) {
+                    krRefreshPending = false;
+                    initWhenKrReady();
+                }
             });
         }
+
+        $(document.body).on('updated_checkout', function() {
+            formIsValidated = false;
+            krInitAttempts = 0;
+            initWhenKrReady();
+        });
 
         initWhenKrReady();
     });
 })(jQuery);
-

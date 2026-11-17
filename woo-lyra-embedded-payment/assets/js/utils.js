@@ -8,11 +8,6 @@
  */
 
 (function($) {
-    // Clear form errors whenever the payment button is clicked (works for dynamically injected buttons).
-    $(document).on('click', '.kr-payment-button', function() {
-        $('.kr-form-error').html('');
-    });
-
     /**
      * Unblock the payment UI (hides the processing overlay and unblocks WooCommerce forms).
      */
@@ -51,7 +46,6 @@
         });
 
         KR.onFocus(function() {
-            $('.kr-form-error').html('');
             if (typeof window.lyraEmbeddedClearBlocksPaymentNotice === 'function') {
                 window.lyraEmbeddedClearBlocksPaymentNotice();
             }

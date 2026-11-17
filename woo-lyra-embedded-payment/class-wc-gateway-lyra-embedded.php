@@ -471,7 +471,7 @@ class WC_Gateway_LyraEmbedded extends WC_Payment_Gateway
      **/
     public function process_payment($order_id)
     {
-        self::log_info("Received paymet request for order #{$order_id} during checkout processing.");
+        self::log_info("Received payment request for order #{$order_id} during checkout processing.");
 
         $is_hpos_enabled = LyraEmbeddedTools::is_hpos_enabled();
 
@@ -768,7 +768,10 @@ class WC_Gateway_LyraEmbedded extends WC_Payment_Gateway
                 $this->lyra_embedded_save_order($order, $trans_status);
             }
 
+            wc_add_notice(__('Your payment was not accepted. Please, try again later.', 'woocommerce'), 'error');
+
             wp_redirect(wc_get_checkout_url());
+
             exit;
         }
     }
@@ -1390,7 +1393,7 @@ class WC_Gateway_LyraEmbedded extends WC_Payment_Gateway
      */
     private static function lyra_embedded_set_last_amount($order, $amount)
     {
-        LyraEmbeddedTools::update_meta_data('_lyra_embedded_last_updated_amount', $amount);
+        LyraEmbeddedTools::update_meta_data($order, '_lyra_embedded_last_updated_amount', $amount, LyraEmbeddedTools::is_hpos_enabled());
 
         if (LyraEmbeddedTools::is_hpos_enabled()) {
             $order->save();
