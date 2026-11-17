@@ -41,7 +41,7 @@ class LyraEmbeddedTools
     /**
      * @var string The current plugin version.
      */
-    private static $PLUGIN_VERSION = '1.0.2';
+    private static $PLUGIN_VERSION = '1.0.3';
 
     /**
      * @var string The REST API base URL.
